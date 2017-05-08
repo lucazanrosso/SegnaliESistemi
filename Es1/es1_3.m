@@ -44,15 +44,16 @@ P = tf(ss(F,G,H,0));
 
 %% In the second part we created the input signals
 
-t = -1.9999:0.0001:10;                          % time
+t = -1.99:0.01:10;                          % time
 u = 0 * t;                                      % creates a zero valued functions
-uL = 0 * t; 
+uL = 0 * t;
+yL = 0 * t;
 
 T = 1;
-T0 = 2;
+T0 = 4;
 
 i = 1;  
-for j=-1.9999:0.0001:10                        % it creates the original signal
+for j=-1.99:0.01:10                        % it creates the original signal
     if (j >= 0)
         for k=0:6
             if (j >= k*T0-T) && (j<= k*T0)
@@ -63,7 +64,7 @@ for j=-1.9999:0.0001:10                        % it creates the original signal
     i=i+1;
 end
 i = 1;  
-for j=-1.9999:0.0001:10                      
+for j=-1.99:0.01:10                      
     if (j >= 0)
         for k=0:6
             if (j >= k*T0) && (j<= k*T0+T)
@@ -75,55 +76,53 @@ for j=-1.9999:0.0001:10
 end
 
 L=5;                                            % it creates the approximate signal
-%for k=0:L
-%    vL = vL + (-1)^k*(sin(2*pi*(2*k+1)*t*0.5))/(2*k+1)^2;
-    %vL = vL + (-1)^((k-1)/2)*(sin((k*pi*t)))/(k)^2;
-%end
-%vL = 8/(pi)^2*vL;
+% for k=-L:1:L
+%     yk = T/T0*sinc(k*T/T0)^2;
+%     [mag,phase,wout] = bode(P, k/T0)
+%     mag*exp(phase)
+%     yk = yk*exp(2*pi*1i*k*t/T0)*mag*exp(phase);
+%     yL = yL + yk;                      
+% end
+yL = 0 * t;
 for k=1:L
-    ck = ((T0/(2*(pi*k)^2*T))*(1 - cos(2*pi*k*T/T0)));
-    vk = ck*cos(2*pi*k*t/T0);
-    uL = uL + vk;                                
+    yk = T/T0*sinc(k*T/T0)^2;
+    [mag,phase,wout] = bode(P, k/T0);
+    yk = yk*cos(2*pi*k*t/T0 + phase )*mag;
+    yL = yL + yk;                      
 end
-uL = T/T0 + 2*uL;
-i = 1;
-for j=-1.9999:0.0001:10
-    if j < 0
-        uL(i) = 0;
-    end
-    i = i+1;
+yL = T/T0 + 2*yL;
+for i=1:1:200
+    yL(i) = 0;
 end
 
 %% In the end we simulated the output signals
-
+ 
 y = lsim(P,u,t);
-yL = lsim(P,uL,t);
 
-eL = y - yL;                                    % calculate the MSE
+eL = y - yL';                                    % calculate the MSE
 plot(t, eL);
 MSE = 0;
-for i=80000:1:100000
-   MSE = MSE + abs(eL(i))^2*0.0001; 
+for i=800:1:1000
+   MSE = MSE + abs(eL(i))^2*0.01; 
 end
-MSE = MSE/T0;
+MSE = MSE/T0
 
-Py = 0;                                         % verify if the MSE is correct
-for i=80000:1:100000
-   Py = Py + abs(y(i))^2*0.0001; 
-end
-Py = Py/T0;
-PyL = 0;
-for i=80000:1:100000
-   PyL = PyL + abs(yL(i))^2*0.0001; 
-end
-PyL = PyL/T0;
-
-MSE
-MSE2 = Py - PyL
+% Py = 0;                                         % verify if the MSE is correct
+% for i=800:1:1000
+%    Py = Py + abs(y(i))^2*0.01; 
+% end
+% Py = Py/T0;
+% PyL = 0;
+% for i=800:1:1000
+%    PyL = PyL + abs(yL(i))^2*0.01; 
+% end
+% PyL = PyL/T0;
+% 
+% MSE2 = Py - PyL
 
 plot(t, y, 'Color', [0 0.5 1],'LineWidth', 1);
 hold on;
-plot(t, yL, 'Color', [1 0.5 0],'LineWidth', 1);
+plot(t, yL, 'Color', [1 0.5 0],'LineWidth', 1); 
 hold on
 plot(t, eL, 'Color', [0.5 1 0.5],'LineWidth', 1);
 hold off
