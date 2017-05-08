@@ -74,23 +74,21 @@ for j=-1.99:0.01:10
     end
     i=i+1;
 end
-
 L=5;                                            % it creates the approximate signal
-% for k=-L:1:L
-%     yk = T/T0*sinc(k*T/T0)^2;
-%     [mag,phase,wout] = bode(P, k/T0)
-%     mag*exp(phase)
-%     yk = yk*exp(2*pi*1i*k*t/T0)*mag*exp(phase);
-%     yL = yL + yk;                      
-% end
-yL = 0 * t;
-for k=1:L
+for k=-L:1:L
     yk = T/T0*sinc(k*T/T0)^2;
     [mag,phase,wout] = bode(P, k/T0);
-    yk = yk*cos(2*pi*k*t/T0 + phase )*mag;
+    yk = yk*exp(1i*(2*pi*k*t/T0 + phase))*mag;
     yL = yL + yk;                      
 end
-yL = T/T0 + 2*yL;
+% yL = 0 * t;
+% for k=1:L
+%     yk = T/T0*sinc(k*T/T0)^2;
+%     [mag,phase,wout] = bode(P, k/T0);
+%     yk = yk*cos(2*pi*k*t/T0 + phase )*mag;
+%     yL = yL + yk;                      
+% end
+% yL = T/T0 + 2*yL;
 for i=1:1:200
     yL(i) = 0;
 end
