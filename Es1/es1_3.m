@@ -77,8 +77,8 @@ end
 L=5;                                            % it creates the approximate signal
 for k=-L:1:L
     yk = T/T0*sinc(k*T/T0)^2;
-    [mag,phase,wout] = bode(P, k/T0);
-    yk = yk*exp(1i*(2*pi*k*t/T0 + phase))*mag;
+    [mag,phase,wout] = bode(P, 2*pi*k/T0);
+    yk = yk*exp(1i*(2*pi*k*t/T0 + phase*pi/180))*mag;
     yL = yL + yk;                      
 end
 % yL = 0 * t;
