@@ -41,31 +41,25 @@ G = G1 + G2;
 P = tf(ss(F,G,H,0));
 
 %%
-% f= 0:0.01:20;
-syms f;
+f = 0:0.1:20;
+% f = 0.8;
 t0 = 10;
-sigma = 0.3;
-% 
+sigma = .3;
 U = sqrt(pi*sigma^2)*exp(-1i*2*pi*f*t0-pi^2*sigma^2*f.^2);
-U = tf(U, 1);
-% Y = P*U;
-
-% plot(f, impulse(Y, f));
-
-
-syms t
-u = cos(5*t);
-U = laplace(u)
-% Y = P*laplace(u)
-% a= 0:0.01:10;
-% impulse (a, impulse(Y,a));
-
-
-
-% L=5;                                            % it creates the approximate signal
-% for k=-L:1:L
-%     yk = T/T0*sinc(k*T/T0)^2;
-%     [mag,phase,wout] = bode(P, 2*pi*k/T0);
-%     yk = yk*exp(1i*(2*pi*k*t/T0 + phase*pi/180))*mag;
-%     yL = yL + yk;                      
-% end
+Y = P*U;
+modulo = zeros(1,201);
+mag2 = zeros(1,201);
+for i=1:1:201 
+    [mag,phase,~] = bode(P, i/100*2*pi);
+    mag2(i) = mag;
+    modulo(i) = mag*U(i);
+end
+plot(f, U)
+hold on
+plot(f, mag2)
+hold on
+plot(f, modulo)
+hold off
+t= 0:0.01:20;
+% plot(t,impulse(Y,t));
+% hold off

@@ -50,6 +50,6 @@ for d=1:1:1000
     yf = impulse(Yf,t);
     modulo(d) = max(yf);
 end
-modulo = 20*log10(modulo);
-
-semilogx(modulo)
+% modulo = 20*log10(modulo);
+plot(modulo)
+% semilogx(modulo)

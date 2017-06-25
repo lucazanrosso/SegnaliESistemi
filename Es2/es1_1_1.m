@@ -46,19 +46,25 @@ t= 0:0.01:20;
 t0 = 10;
 
 sigma = 3;
-u = exp(-(t-t0).^2/sigma^2);
-y = lsim(P,u,t);
-plot(t, y)
-hold on
-
+u1 = exp(-((t-t0).^2)/sigma^2);
 sigma = 1;
-u = exp(-(t-t0).^2/sigma^2);
-y = lsim(P,u,t);
-plot(t, y)
-hold on
+u2 = exp(-(t-t0).^2/sigma^2);
+sigma = .3;
+u3 = exp(-(t-t0).^2/sigma^2);
 
-sigma = .01;
-u = exp(-(t-t0).^2/sigma^2);
-y = lsim(P,u,t);
-plot(t, u)
+for i=1:1:1000 
+    u1(i) = 0;
+    u2(i) = 0;
+    u3(i) = 0;
+end
+
+y1 = lsim(P,u1,t);
+y2 = lsim(P,u2,t);
+y3 = lsim(P,u3,t);
+
+plot(t, y1)
+hold on
+plot(t, y2)
+hold on
+plot(t, y3)
 hold off
