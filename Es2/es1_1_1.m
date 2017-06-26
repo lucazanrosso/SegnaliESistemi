@@ -52,19 +52,23 @@ u2 = exp(-(t-t0).^2/sigma^2);
 sigma = .3;
 u3 = exp(-(t-t0).^2/sigma^2);
 
-for i=1:1:1000 
-    u1(i) = 0;
-    u2(i) = 0;
-    u3(i) = 0;
-end
+% for i=1:1:1000 
+%     u1(i) = 0;
+%     u2(i) = 0;
+%     u3(i) = 0;
+% end
 
-y1 = lsim(P,u1,t);
-y2 = lsim(P,u2,t);
-y3 = lsim(P,u3,t);
+% y1 = lsim(P,u1,t);
+% y2 = lsim(P,u2,t);
+% y3 = lsim(P,u3,t);
 
-plot(t, y1)
-hold on
-plot(t, y2)
-hold on
-plot(t, y3)
-hold off
+% lsim(P,u1,t);
+% lsim(P,u2,t);
+lsim(P,u3,t);
+
+% plot(t, y1)
+% hold on
+% plot(t, y2)
+% hold on
+% plot(t, y3)
+% hold off

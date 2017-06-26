@@ -41,25 +41,42 @@ G = G1 + G2;
 P = tf(ss(F,G,H,0));
 
 %%
-f = 0:0.1:20;
-% f = 0.8;
+f = -10:0.1:10;
+% f = 0.1;
 t0 = 10;
 sigma = .3;
 U = sqrt(pi*sigma^2)*exp(-1i*2*pi*f*t0-pi^2*sigma^2*f.^2);
-Y = P*U;
-modulo = zeros(1,201);
-mag2 = zeros(1,201);
-for i=1:1:201 
-    [mag,phase,~] = bode(P, i/100*2*pi);
-    mag2(i) = mag;
-    modulo(i) = mag*U(i);
-end
-plot(f, U)
+
+H = squeeze(freqresp(P, f*2*pi));
+
+Y = abs(U).*abs(H)';
+
+plot(f, abs(U))
 hold on
-plot(f, mag2)
+plot(f, abs(H))
 hold on
-plot(f, modulo)
+plot(f, abs(Y))
 hold off
-t= 0:0.01:20;
+
+% U = abs(U);
+% Y = P*U;
+% modulo = zeros(1,201);
+% mag2 = zeros(1,201);
+% [mag,phase,~] = bode(P, f*2*pi);
+% mag = squeeze(mag)
+% for i=1:1:201 
+%     [mag,phase,~] = bode(P, i/100*2*pi);
+%     mag2(i) = mag;
+%     modulo(i) = mag*U(i);
+% end
+% mag2
+% plot(f, U)
+% hold on
+% hold on
+% plot(f, mag2)
+% hold on
+% plot(f, modulo)
+% hold off
+% t= 0:0.01:20;
 % plot(t,impulse(Y,t));
 % hold off
