@@ -42,33 +42,66 @@ P = tf(ss(F,G,H,0));
 
 %%
 
-t= 0:0.01:20;
+% t= 0:0.01:20;
+% t0 = 10;
+% 
+% sigma = .3;
+% u = exp(-((t-t0).^2)/sigma^2);
+% 
+% lsim(P,u,t);
+% 
+% y = lsim(P,u1,t);
+
+% plot(t, y)
+% hold on
+
+%%
+
+f = -10:0.1:10;
 t0 = 10;
 
-sigma = 3;
-u1 = exp(-((t-t0).^2)/sigma^2);
-sigma = 1;
-u2 = exp(-(t-t0).^2/sigma^2);
+H = squeeze(freqresp(P, f*2*pi));
+
 sigma = .3;
-u3 = exp(-(t-t0).^2/sigma^2);
+U = sqrt(pi*sigma^2)*exp(-1i*2*pi*f*t0-pi^2*sigma^2*f.^2);
+Y = abs(U).*abs(H)';
 
-% for i=1:1:1000 
-%     u1(i) = 0;
-%     u2(i) = 0;
-%     u3(i) = 0;
-% end
+plot(f, abs(U))
+hold on
+plot(f, abs(H))
+hold on
+plot(f, abs(Y))
+hold off
 
-% y1 = lsim(P,u1,t);
-% y2 = lsim(P,u2,t);
-% y3 = lsim(P,u3,t);
+%%
 
-% lsim(P,u1,t);
-% lsim(P,u2,t);
-lsim(P,u3,t);
+% t= 0:0.01:20;
+% t0 = 10;
+% 
+% sigma = .3;
+% u = exp(-((t-t0).^2)/sigma^2) + exp(-((t-4/3*t0).^2)/sigma^2);
+% 
+% lsim(P,u,t);
 
-% plot(t, y1)
+% y = lsim(P,u1,t);
+% 
+% plot(t, y)
 % hold on
-% plot(t, y2)
+
+%%
+
+% f = -10:0.01:10;
+% t0 = 10;
+% 
+% H = squeeze(freqresp(P, f*2*pi));
+% 
+% sigma = 3;
+% U = sqrt(pi*sigma^2)*exp(-1i*2*pi*f*t0-pi^2*sigma^2*f.^2) + sqrt(pi*sigma^2)*exp(-1i*2*pi*f*4/3*t0-pi^2*sigma^2*f.^2);
+% Y = abs(U).*abs(H)';
+% 
+% plot(f, abs(U))
 % hold on
-% plot(t, y3)
+% plot(f, abs(H))
+% hold on
+% plot(f, abs(Y))
 % hold off
