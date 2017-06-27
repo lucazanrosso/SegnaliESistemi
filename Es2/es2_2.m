@@ -66,8 +66,8 @@ Yfft = T/N*fft(y');
 
 Ufftord =[Ufft(:,N/2+1:N) Ufft(:,1:N/2)];
 Yfftord =[Yfft(:,N/2+1:N) Yfft(:,1:N/2)]; %riordina i campioni...
-Ufftord1 = fftshift(Ufft);
-Yfftord1 = fftshift(Yfft);
+% Ufftord1 = fftshift(Ufft);
+% Yfftord1 = fftshift(Yfft);
 
 % plot(f,abs(U), 'Color', [0 0.5 1],'LineWidth', 0.5);
 % hold on
@@ -90,8 +90,9 @@ end
 % plot(f,abs(H2), 'Color', [0.5 1 0.5],'LineWidth', 0.5);
 % hold off
 h = impulse(P, t);
-% h2 = (real(Fc*ifft(H2)));
-h2 = (real(Fc*ifft(H2)));
+h2 = real(Fc*ifft(H2));
+% h2 = h2./cos(2*pi*50*t)';
+h2 = h2./cos(2*pi*Fc/2*t);
 plot(t, h);
 hold on
 plot(t, h2);

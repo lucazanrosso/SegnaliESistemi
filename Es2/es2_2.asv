@@ -45,7 +45,7 @@ P = tf(ss(F,G,H,0));
 t0 = 10;
 sigma = .3;
 
-Tc = .01; %passo di campionamento nel tempo
+Tc = .001; %passo di campionamento nel tempo
 T = 20; % ripetizione periodica
 tp=-T/2:Tc:T/2; %solo per disegnare il segnale
 t=0:Tc:T-Tc; 
@@ -66,6 +66,7 @@ Yfft = T/N*fft(y');
 
 Ufftord =[Ufft(:,N/2+1:N) Ufft(:,1:N/2)];
 Yfftord =[Yfft(:,N/2+1:N) Yfft(:,1:N/2)]; %riordina i campioni...
+% Ufftord1 = fftshift(Ufft);
 % Yfftord1 = fftshift(Yfft);
 
 % plot(f,abs(U), 'Color', [0 0.5 1],'LineWidth', 0.5);
@@ -80,14 +81,19 @@ Yfftord =[Yfft(:,N/2+1:N) Yfft(:,1:N/2)]; %riordina i campioni...
 % hold off
 % plot(f, abs(H), 'Color', [0 0.5 1],'LineWidth', 0.5);
 % hold on
-% H2 = abs(Yfftord)./abs(Ufftord);
-% for i=1:1:2000
-%     if (abs(Ufftord(i)) < 0.00001)
-%         H2(i) = 0;
-%     end
-% end
-% plot(f,H2, 'Color', [0.5 1 0.5],'LineWidth', 0.5);
+H2 = Yfftord./Ufftord;
+for i=1:1:size(U')
+    if (abs(Ufftord(i)) < 0.00001)
+        H2(i) = 0;
+    end
+end
+% plot(f,abs(H2), 'Color', [0.5 1 0.5],'LineWidth', 0.5);
 % hold off
-
-h2 = (real(Fc*ifft(H2)));
-plot (t,
+h = impulse(P, t);
+h2 = real(Fc*ifft(H2));
+% h2 = h2./cos(2*pi*50*t)';
+h2 = h2./cos(2*pi*Tc/2*t);
+plot(t, h);
+hold on
+plot(t, h2);
+hold off
