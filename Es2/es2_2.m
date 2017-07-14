@@ -87,8 +87,7 @@ for i=1:1:size(U')
         H2(i) = 0;
     end
 end
-% plot(f,abs(H2), 'Color', [0.5 1 0.5],'LineWidth', 0.5);
-% hold off
+plot(f,abs(H2), 'Color', [0.5 1 0.5],'LineWidth', 0.5);
 h = impulse(P, t);
 h2 = real(Fc*ifft(H2));
 % h2 = h2./cos(2*pi*50*t)';
